@@ -1,0 +1,34 @@
+{
+    "name": "kuncen/mcs-laravel-rabbitmq",
+    "description": "RabbitMQ Publisher and Consumer Laravel for Microservices Architecture",
+    "keywords": [
+        "laravel",
+        "microservice",
+        "rabbitmq"
+    ],
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "^8.1",
+        "php-amqplib/php-amqplib": "^3.0",
+        "illuminate/support": "^10|^11|^12.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kuncen\\MCSLaravel\\RabbitMQ\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Muhammad Fadlul Hafiizh",
+            "email": "rrkuncen@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Kuncen\\MCSLaravel\\RabbitMQ\\RabbitMQServiceProvider"
+            ]
+        }
+    }
+}
