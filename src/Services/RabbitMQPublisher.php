@@ -14,17 +14,17 @@ class RabbitMQPublisher
 
     public function __construct()
     {
-        $this->defaultExchange = config('rabbitmq.exchange');
+        $this->defaultExchange = config('rabbitmq.connection.exchange');
     }
 
     protected function connect(): void
     {
         $this->connection = new AMQPStreamConnection(
-            config('rabbitmq.host'),
-            config('rabbitmq.port'),
-            config('rabbitmq.username'),
-            config('rabbitmq.password'),
-            config('rabbitmq.vhost')
+            config('rabbitmq.connection.host'),
+            config('rabbitmq.connection.port'),
+            config('rabbitmq.connection.username'),
+            config('rabbitmq.connection.password'),
+            config('rabbitmq.connection.vhost')
         );
 
         $this->channel = $this->connection->channel();
