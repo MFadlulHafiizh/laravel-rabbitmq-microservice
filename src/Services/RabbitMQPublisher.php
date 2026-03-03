@@ -80,11 +80,7 @@ class RabbitMQPublisher
                 $routingKey
             );
         } catch (\Throwable $e) {
-            Log::chanel('rabbitmq')->error('RabbitMQ publish error', [
-                'error' => $e->getMessage(),
-                'exchange' => $exchange ?? $this->defaultExchange,
-                'routing_key' => $routingKey,
-            ]);
+            throw new \RuntimeException($e->getMessage(), 0, $e);
         }
     }
 }
