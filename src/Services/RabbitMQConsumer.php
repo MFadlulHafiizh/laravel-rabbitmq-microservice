@@ -56,6 +56,19 @@ class RabbitMQConsumer
                 } catch (\Throwable $e) {
                     $msg->nack(false, false);
                     $output->writeln("<error>FAILED</error>");
+                    $msg->nack(false, false);
+                    $output->writeln("<error>FAILED</error>");
+                    $output->writeln("");
+                    $output->writeln("<error>{$e->getMessage()}</error>");
+                    $output->writeln("<comment>{$e->getFile()}:{$e->getLine()}</comment>");
+
+                    $output->writeln("<comment>{$e->getTraceAsString()}</comment>");
+
+                    logger()->error('RabbitMQ Listener Failed', [
+                        'queue' => $queue,
+                        'message' => $msg->body,
+                        'exception' => $e
+                    ]);
                 }
             }
         );
