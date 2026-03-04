@@ -67,7 +67,7 @@ class RabbitMQPublisher
             $exchange = $exchange ?? $this->defaultExchange;
 
             $message = new AMQPMessage(
-                json_encode([$payload], JSON_THROW_ON_ERROR),
+                json_encode($payload, JSON_THROW_ON_ERROR),
                 [
                     'content_type' => 'application/json',
                     'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT,
