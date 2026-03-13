@@ -8,5 +8,10 @@ return [
         'password' => env('RABBITMQ_PASSWORD', 'guest'),
         'vhost' => env('RABBITMQ_VHOST', '/'),
         'exchange' => env('RABBITMQ_EXCHANGE', 'amq.direct'),
+    ],
+    'retry' => [
+        'enabled' => true,
+        'max_attempts' => 3,
+        'ttl' => 10000
     ]
 ];

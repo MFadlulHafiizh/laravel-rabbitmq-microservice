@@ -2,9 +2,10 @@
 
 namespace Kuncen\MCSLaravel\RabbitMQ\Services;
 
+use Illuminate\Support\Facades\Log;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
 use PhpAmqpLib\Message\AMQPMessage;
-use Illuminate\Support\Facades\Log;
+use PhpAmqpLib\Wire\AMQPTable;
 
 class RabbitMQPublisher
 {
@@ -71,6 +72,9 @@ class RabbitMQPublisher
                 [
                     'content_type' => 'application/json',
                     'delivery_mode' => AMQPMessage::DELIVERY_MODE_PERSISTENT,
+                    'application_headers' => new AMQPTable([
+                        'x-retry-count' => 0
+                    ])
                 ]
             );
 

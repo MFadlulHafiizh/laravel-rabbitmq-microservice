@@ -2,9 +2,10 @@
 
 namespace Kuncen\MCSLaravel\RabbitMQ\Services;
 
+use Kuncen\MCSLaravel\RabbitMQ\Consumer\MessageHandler;
 use Kuncen\MCSLaravel\RabbitMQ\Contracts\RabbitMQListener;
+use Kuncen\MCSLaravel\RabbitMQ\Infrastructure\TopologyManager;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
-use PhpAmqpLib\Message\AMQPMessage;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 class RabbitMQConsumer
@@ -29,7 +30,11 @@ class RabbitMQConsumer
             $config['connection']['vhost']
         );
 
+        
         $channel = $connection->channel();
+
+        $topology = new TopologyManager($channel);
+        $topology->declare($queue);
 
         $output = new ConsoleOutput();
         $output->writeln("Listening on queue: {$queue}");
@@ -38,6 +43,7 @@ class RabbitMQConsumer
 
         $channel->basic_qos(null, 1, null);
 
+        $handler = new MessageHandler($listener, $channel, $queue, $output);
         $channel->basic_consume(
             $queue,
             '',
@@ -45,30 +51,7 @@ class RabbitMQConsumer
             false,
             false,
             false,
-            function (AMQPMessage $msg) use ($listener, $output, $queue) {
-
-                $output->write("Running {$queue} ... ");
-
-                try {
-                    $listener->handle(json_decode($msg->body, true));
-                    $msg->ack();
-                    $output->writeln("<info>SUCCESS</info>");
-                } catch (\Throwable $e) {
-                    $msg->nack(false, false);
-                    $output->writeln("<error>FAILED</error>");
-                    $output->writeln("");
-                    $output->writeln("<error>{$e->getMessage()}</error>");
-                    $output->writeln("<comment>{$e->getFile()}:{$e->getLine()}</comment>");
-
-                    $output->writeln("<comment>{$e->getTraceAsString()}</comment>");
-
-                    logger()->error('RabbitMQ Listener Failed', [
-                        'queue' => $queue,
-                        'message' => $msg->body,
-                        'exception' => $e
-                    ]);
-                }
-            }
+            $handler
         );
 
         while ($channel->is_consuming()) {
