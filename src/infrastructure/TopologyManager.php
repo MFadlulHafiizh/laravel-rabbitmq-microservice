@@ -5,12 +5,10 @@ namespace Kuncen\MCSLaravel\RabbitMQ\Infrastructure;
 class TopologyManager
 {
     protected $channel;
-
     public function __construct($channel)
     {
         $this->channel = $channel;
     }
-
     public function declare(string $queue): void
     {
         $retryQueue = $queue . '.retry';
