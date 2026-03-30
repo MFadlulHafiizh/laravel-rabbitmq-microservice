@@ -24,7 +24,7 @@ composer require kuncen/mcs-laravel-rabbitmq
 ## Publish Configuration
 
 ```bash
-php artisan vendor:publish --provider="Kuncen\McsRabbitMQ\RabbitMQServiceProvider"
+php artisan vendor:publish --provider="Kuncen\MCSLaravel\RabbitMQ\RabbitMQServiceProvider"
 ```
 
 This will publish:
